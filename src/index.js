@@ -1,6 +1,6 @@
 const express = require('express');
-
 const talkerManager = require('./talkerManager');
+const generateToken = require('./utils/generateToken');
 
 const app = express();
 app.use(express.json());
@@ -34,6 +34,12 @@ app.get('/talker/:id', async (req, res) => {
       .json({ message: 'Pessoa palestrante não encontrada' });
   }
   return res.status(HTTP_OK_STATUS).json(talker);
+});
+
+app.post('/login', async (_req, res) => {
+  // const { email, password } = req.body;
+  const token = generateToken();
+  return res.status(HTTP_OK_STATUS).json({ token });
 });
 
 app.listen(PORT, () => {
