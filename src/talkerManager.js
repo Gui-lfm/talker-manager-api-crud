@@ -1,4 +1,3 @@
-const { writeFile } = require('fs');
 const fs = require('fs/promises');
 const { join } = require('path');
 
