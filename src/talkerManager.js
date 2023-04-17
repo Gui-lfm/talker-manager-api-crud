@@ -1,3 +1,4 @@
+const { writeFile } = require('fs');
 const fs = require('fs/promises');
 const { join } = require('path');
 
@@ -12,14 +13,14 @@ const readTalkerFile = async () => {
   }
 };
 
-// const WriteTalkerFile = async (content) => {
-//   try {
-//     await fs.writeFile(join(__dirname, path), JSON.stringify(content));
-//   } catch (error) {
-//     console.log('erro ao salvar modificações', error.message);
-//     return null;
-//   }
-// };
+const WriteTalkerFile = async (content) => {
+  try {
+    await fs.writeFile(join(__dirname, path), JSON.stringify(content));
+  } catch (error) {
+    console.log('erro ao salvar modificações', error.message);
+    return null;
+  }
+};
 
 const getTalkers = async () => {
   const talkers = await readTalkerFile();
@@ -32,7 +33,20 @@ const getTalkerById = async (id) => {
   return Selectedtalker;
 };
 
+const createNewTalker = async (content) => {
+  const talkers = await readTalkerFile();
+
+  const newId = talkers[talkers.length - 1].id + 1;
+  const newTalker = { id: newId, ...content };
+  talkers.push(newTalker);
+
+  await WriteTalkerFile(talkers);
+  
+  return newTalker;
+};
+
 module.exports = {
   getTalkers,
   getTalkerById,
+  createNewTalker,
 };

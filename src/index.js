@@ -4,6 +4,9 @@ const generateToken = require('./utils/generateToken');
 const validateEmail = require('./middlewares/validateEmail');
 const validatePassword = require('./middlewares/validatePassword');
 const validateToken = require('./middlewares/validateToken');
+const validateName = require('./middlewares/validateName');
+const validateAge = require('./middlewares/validateAge');
+const validateTalk = require('./middlewares/validateTalk');
 
 const app = express();
 app.use(express.json());
@@ -26,7 +29,7 @@ app.get('/talker', async (_req, res) => {
 
 app.get('/talker/:id', async (req, res) => {
   const { id } = req.params;
-
+  console.log(id);
   const talker = await talkerManager.getTalkerById(id);
 
   if (!talker) {
@@ -42,9 +45,18 @@ app.post('/login', validateEmail, validatePassword, async (_req, res) => {
   return res.status(HTTP_OK_STATUS).json({ token });
 });
 
-app.post('/talker', validateToken, async (req, res) => {
-  return res.status(HTTP_CREATED_STATUS)
-});
+app.post(
+  '/talker',
+  validateToken,
+  validateName,
+  validateAge,
+  validateTalk,
+  async (req, res) => {
+    const { name, age, talk } = req.body;
+    const newTalker = await talkerManager.createNewTalker({ name, age, talk });
+    return res.status(HTTP_CREATED_STATUS).json(newTalker);
+  }
+);
 
 app.listen(PORT, () => {
   console.log('Online');
