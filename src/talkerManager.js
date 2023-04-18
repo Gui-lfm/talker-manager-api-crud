@@ -40,12 +40,26 @@ const createNewTalker = async (content) => {
   talkers.push(newTalker);
 
   await WriteTalkerFile(talkers);
-  
+
   return newTalker;
 };
 
+const editTalk = async ({ id, name, age, talk }) => {
+  const talkers = await readTalkerFile();
+  const Selectedtalker = talkers.find((talker) => talker.id === Number(id));
+
+  Selectedtalker.name = name;
+  Selectedtalker.age = age;
+  Selectedtalker.talk = talk;
+
+  await WriteTalkerFile(talkers);
+  return Selectedtalker;
+};
+
 module.exports = {
+  readTalkerFile,
   getTalkers,
   getTalkerById,
   createNewTalker,
+  editTalk,
 };

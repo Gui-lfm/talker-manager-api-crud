@@ -1,4 +1,7 @@
+const talkerManager = require('../talkerManager');
+
 const HTTP_BAD_REQUEST_STATUS = 400;
+const HTTP_NOT_FOUND_STATUS = 404;
 const validDateFormat = /^([0-2][0-9]|(3)[0-1])(\/)(((0)[0-9])|((1)[0-2]))(\/)\d{4}$/i;
 
 const validateTalk = (req, res, next) => {
@@ -48,8 +51,22 @@ const validateRate = (req, res, next) => {
   next();
 };
 
+const idExists = async (req, res, next) => {
+  const { id } = req.params;
+  const talkers = await talkerManager.readTalkerFile();
+
+  if (talkers.some((talker) => talker.id === Number(id))) {
+    return next();
+  }
+
+  return res
+    .status(HTTP_NOT_FOUND_STATUS)
+    .json({ message: 'Pessoa palestrante não encontrada' });
+};
+
 module.exports = {
   validateTalk,
   validateWatchedAt,
   validateRate,
+  idExists,
 };

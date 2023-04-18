@@ -60,6 +60,25 @@ app.post(
   },
 );
 
+app.put(
+  '/talker/:id',
+  validateToken,
+  validateName,
+  validateAge,
+  validations.validateTalk,
+  validations.validateWatchedAt,
+  validations.validateRate,
+  validations.idExists,
+  async (req, res) => {
+    const { id } = req.params;
+    const { name, age, talk } = req.body;
+    const talkToEdit = { id, name, age, talk };
+    const updatedTalker = await talkerManager.editTalk(talkToEdit);
+
+    return res.status(HTTP_OK_STATUS).json(updatedTalker);
+  },
+);
+
 app.listen(PORT, () => {
   console.log('Online');
 });
