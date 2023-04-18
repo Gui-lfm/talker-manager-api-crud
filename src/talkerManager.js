@@ -56,10 +56,18 @@ const editTalk = async ({ id, name, age, talk }) => {
   return Selectedtalker;
 };
 
+const deleteTalker = async (id) => {
+  const talkers = await readTalkerFile();
+  const updatedTalkers = talkers.filter((talker) => talker.id !== Number(id));
+
+  await WriteTalkerFile(updatedTalkers);
+};
+
 module.exports = {
   readTalkerFile,
   getTalkers,
   getTalkerById,
   createNewTalker,
   editTalk,
+  deleteTalker,
 };

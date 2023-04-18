@@ -13,7 +13,7 @@ app.use(express.json());
 
 const HTTP_OK_STATUS = 200;
 const HTTP_CREATED_STATUS = 201;
-// const HTTP_NO_CONTENT_STATUS = 204;
+const HTTP_NO_CONTENT_STATUS = 204;
 const HTTP_NOT_FOUND_STATUS = 404;
 const PORT = process.env.PORT || '3001';
 
@@ -76,6 +76,17 @@ app.put(
     const updatedTalker = await talkerManager.editTalk(talkToEdit);
 
     return res.status(HTTP_OK_STATUS).json(updatedTalker);
+  },
+);
+
+app.delete(
+  '/talker/:id',
+  validateToken,
+  validations.idExists,
+  async (req, res) => {
+    const { id } = req.params;
+    await talkerManager.deleteTalker(id);
+    return res.status(HTTP_NO_CONTENT_STATUS).end();
   },
 );
 
