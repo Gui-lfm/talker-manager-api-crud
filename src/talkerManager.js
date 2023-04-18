@@ -63,14 +63,24 @@ const deleteTalker = async (id) => {
   await WriteTalkerFile(updatedTalkers);
 };
 
-const searchTalkers = async (q) => {
+const searchTalkers = async (q, rate) => {
   const talkers = await readTalkerFile();
 
-  if (!q) {
-    return talkers;
+  let searchResult = talkers;
+
+  if (rate) {
+    searchResult = searchResult.filter(
+      (talker) => talker.talk.rate === Number(rate)
+    );
+    console.log(searchResult);
   }
 
-  const searchResult = talkers.filter((talker) => talker.name.includes(q));
+  if (q) {
+    searchResult = searchResult.filter((talker) =>
+      talker.name.toLowerCase().includes(q.toLowerCase())
+    );
+    console.log(searchResult);
+  }
 
   return searchResult;
 };

@@ -7,6 +7,7 @@ const validateToken = require('./middlewares/validateToken');
 const validateName = require('./middlewares/validateName');
 const validateAge = require('./middlewares/validateAge');
 const validations = require('./middlewares/validations');
+const searchValidations = require('./middlewares/searchValidations');
 
 const app = express();
 app.use(express.json());
@@ -27,16 +28,21 @@ app.get('/talker', async (_req, res) => {
   return res.status(HTTP_OK_STATUS).json(talkers);
 });
 
-app.get('/talker/search', validateToken, async (req, res) => {
-  const { q } = req.query;
-  const searchTalkers = await talkerManager.searchTalkers(q);
+app.get(
+  '/talker/search',
+  validateToken,
+  searchValidations.rate,
+  async (req, res) => {
+    const { q, rate } = req.query;
 
-  return res.status(HTTP_OK_STATUS).json(searchTalkers);
-});
+    const searchTalkers = await talkerManager.searchTalkers(q, rate);
+
+    return res.status(HTTP_OK_STATUS).json(searchTalkers);
+  },
+);
 
 app.get('/talker/:id', async (req, res) => {
   const { id } = req.params;
-  console.log(id);
   const talker = await talkerManager.getTalkerById(id);
 
   if (!talker) {
