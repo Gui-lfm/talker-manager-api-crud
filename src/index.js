@@ -33,9 +33,9 @@ app.get(
   validateToken,
   searchValidations.rate,
   async (req, res) => {
-    const { q, rate } = req.query;
+    const { q, rate, date } = req.query;
 
-    const searchTalkers = await talkerManager.searchTalkers(q, rate);
+    const searchTalkers = await talkerManager.searchTalkers({ q, rate, date });
 
     return res.status(HTTP_OK_STATUS).json(searchTalkers);
   },
