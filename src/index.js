@@ -64,7 +64,7 @@ app.post(
     const { name, age, talk } = req.body;
     const newTalker = await talkerManager.createNewTalker({ name, age, talk });
     return res.status(HTTP_CREATED_STATUS).json(newTalker);
-  }
+  },
 );
 
 app.put(
@@ -83,7 +83,7 @@ app.put(
     const updatedTalker = await talkerManager.editTalk(talkToEdit);
 
     return res.status(HTTP_OK_STATUS).json(updatedTalker);
-  }
+  },
 );
 
 app.delete(
@@ -94,7 +94,7 @@ app.delete(
     const { id } = req.params;
     await talkerManager.deleteTalker(id);
     return res.status(HTTP_NO_CONTENT_STATUS).end();
-  }
+  },
 );
 
 app.listen(PORT, () => {
